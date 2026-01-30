@@ -5,7 +5,6 @@ import FilePreview from '../../components/FilePreview';
 import {
   ArrowRight,
   Loader2,
-  Upload,
   Presentation
 } from 'lucide-react';
 import { api } from '../../services/api';
@@ -34,24 +33,37 @@ const PptToPdf = () => {
 
   const handleDragOver = (e) => e.preventDefault();
 
+  // =========================
+  // 🔥 PPT → PDF HANDLER
+  // =========================
   const handleConvert = async () => {
     if (!selectedFile) {
-      alert('Please upload a PPT or PPTX file first.');
+      alert("Please select a PowerPoint file first");
       return;
     }
 
     setIsConverting(true);
-    setProcessingStatus('processing');
+    setProcessingStatus("processing");
 
     try {
-      const result = await api.convert(selectedFile, 'pdf');
-      setResult(result);
-      setProcessingStatus('complete');
-      navigate('/download');
+      // ✅ BACKEND RETURNS JSON
+      const response = await api.pptToPdf(selectedFile);
+
+      const filename = response.data.file;
+
+      // ✅ BUILD DOWNLOAD URL
+      setResult({
+        url: `http://13.233.66.13:5000/api/pdf/download/${filename}`,
+        filename: filename,
+      });
+
+      setProcessingStatus("complete");
+      navigate("/download");
+
     } catch (error) {
-      console.error(error);
-      setProcessingStatus('error');
-      alert('Conversion failed. Please try again.');
+      console.error("PPT TO PDF ERROR:", error);
+      setProcessingStatus("error");
+      alert("Conversion failed");
     } finally {
       setIsConverting(false);
     }
@@ -69,7 +81,7 @@ const PptToPdf = () => {
           Convert PowerPoint presentations into high-quality PDFs.
         </p>
 
-        {/* 🔴 NO FILE → HERO UPLOAD */}
+        {/* 🔴 NO FILE */}
         {!selectedFile && (
           <div
             className="
@@ -122,12 +134,10 @@ const PptToPdf = () => {
         {selectedFile && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
 
-            {/* File Preview */}
             <div>
               <FilePreview file={selectedFile} />
             </div>
 
-            {/* Convert Button */}
             <div className="flex items-center justify-center">
               <button
                 onClick={handleConvert}

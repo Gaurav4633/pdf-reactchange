@@ -33,29 +33,40 @@ const PdfToExcel = () => {
   };
 
   const handleDragOver = (e) => e.preventDefault();
+const handleConvert = async () => {
+  if (!selectedFile) {
+    alert("Please select a PDF file");
+    return;
+  }
 
-  const handleConvert = async () => {
-    if (!selectedFile) {
-      alert('Please upload a PDF file first.');
-      return;
-    }
+  // ✅ CORRECT STATE
+  setIsConverting(true);
+  setProcessingStatus("processing");
 
-    setIsConverting(true);
-    setProcessingStatus('processing');
+  try {
+    const response = await api.pdfToExcel(selectedFile);
 
-    try {
-      const result = await api.convert(selectedFile, 'excel');
-      setResult(result);
-      setProcessingStatus('complete');
-      navigate('/download');
-    } catch (error) {
-      console.error(error);
-      setProcessingStatus('error');
-      alert('Conversion failed. Please try again.');
-    } finally {
-      setIsConverting(false);
-    }
-  };
+    const filename = response.data.file;
+
+    setResult({
+      url: `http://13.233.66.13:5000/api/pdf/download/${filename}`,
+      filename: filename,
+    });
+
+    setProcessingStatus("complete");
+    navigate("/download");
+
+  } catch (error) {
+    console.error("PDF TO EXCEL ERROR:", error);
+    setProcessingStatus("error");
+    alert("PDF to Excel conversion failed");
+  } finally {
+    // ✅ CORRECT STATE
+    setIsConverting(false);
+  }
+};
+
+
 
   return (
     <div className="container mx-auto px-4 py-16">

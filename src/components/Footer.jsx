@@ -83,8 +83,8 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/convert/pdf-to-jpg" className="footer-link">
-                  PDF to JPG
+                <Link to="/convert/pdf-to-image" className="footer-link">
+                  PDF to Image
                 </Link>
               </li>
             </ul>

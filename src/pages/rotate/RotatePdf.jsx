@@ -16,7 +16,7 @@ const RotatePdf = () => {
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // 🔹 multiple files (same as MergePdf)
+  // 🔹 files state
   const [files, setFiles] = useState(
     selectedFile ? [selectedFile] : []
   );
@@ -24,7 +24,7 @@ const RotatePdf = () => {
   const [rotation, setRotation] = useState(90);
   const fileInputRef = useRef(null);
 
-  // 🔹 add files
+  // 🔹 file select
   const handleFileChange = (e) => {
     const newFiles = Array.from(e.target.files);
     if (newFiles.length) {
@@ -32,6 +32,7 @@ const RotatePdf = () => {
     }
   };
 
+  // 🔹 drag & drop
   const handleDrop = (e) => {
     e.preventDefault();
     const newFiles = Array.from(e.dataTransfer.files);
@@ -41,39 +42,41 @@ const RotatePdf = () => {
   const handleDragOver = (e) => e.preventDefault();
 
   // =========================
-  // 🔁 ROTATE HANDLER
+  // 🔁 ROTATE HANDLER (FIXED)
   // =========================
-  const handleRotate = async () => {
-    if (files.length === 0) {
-      alert('Please add at least 1 PDF file.');
-      return;
-    }
+ const handleRotate = async () => {
+  if (files.length === 0) {
+    alert("Please select a PDF file");
+    return;
+  }
 
-    setIsProcessing(true);
-    setProcessingStatus('processing');
+  setIsProcessing(true);
+  setProcessingStatus("processing");
 
-    try {
-      // 🔥 rotate first PDF (safe default)
-      const pdfBlob = await api.rotate(files[0], rotation);
+  try {
+    // 🔥 use FIRST selected file
+    const response = await api.rotatePdf(files[0], rotation);
 
-      const url = window.URL.createObjectURL(pdfBlob);
+    const filename = response.data.file;
 
-      setResult({
-        url,
-        filename: "rotated_document.pdf",
-      });
+    setResult({
+      url: `http://13.233.66.13:5000/api/pdf/download/${filename}`,
+      filename: filename,
+    });
 
-      setProcessingStatus('complete');
-      navigate('/download');
+    setProcessingStatus("complete");
+    navigate("/download");
 
-    } catch (error) {
-      console.error(error);
-      setProcessingStatus('error');
-      alert('Rotation failed. Please try again.');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+  } catch (error) {
+    console.error("ROTATE PDF ERROR:", error);
+    setProcessingStatus("error");
+    alert("Rotate failed");
+  } finally {
+    setIsProcessing(false);
+  }
+};
+
+
 
   return (
     <div className="container mx-auto px-4 py-16">

@@ -15,47 +15,60 @@ const PdfToWord = () => {
   const navigate = useNavigate();
   const [isConverting, setIsConverting] = useState(false);
   const fileInputRef = useRef(null);
+  
+/* ================= FILE HANDLERS ================= */
 
-  // 🔹 file handlers (Hero style)
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-    }
-  };
+const handleFileChange = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    setSelectedFile(file);
+  }
+};
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      setSelectedFile(file);
-    }
-  };
+const handleDrop = (e) => {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    setSelectedFile(file);
+  }
+};
 
-  const handleDragOver = (e) => e.preventDefault();
+const handleDragOver = (e) => {
+  e.preventDefault();
+};
 
-  const handleConvert = async () => {
-    if (!selectedFile) {
-      alert('Please upload a PDF file first.');
-      return;
-    }
+  /* ================= CONVERT FUNCTION ================= */
+const handleConvert = async () => {
+  if (!selectedFile) {
+    alert("Please upload a PDF file first.");
+    return;
+  }
 
-    setIsConverting(true);
-    setProcessingStatus('processing');
+  setIsConverting(true);
+  setProcessingStatus("processing");
 
-    try {
-      const result = await api.convert(selectedFile, 'word');
-      setResult(result);
-      setProcessingStatus('complete');
-      navigate('/download');
-    } catch (error) {
-      console.error(error);
-      setProcessingStatus('error');
-      alert('Conversion failed. Please try again.');
-    } finally {
-      setIsConverting(false);
-    }
-  };
+  try {
+    const response = await api.pdfToWord(selectedFile); // 👈 new api
+
+    const filename = response.data.file;
+
+    setResult({
+      url: `http://13.233.66.13:5000/api/pdf/download/${filename}`,
+      filename: filename,
+    });
+
+    setProcessingStatus("complete");
+    navigate("/download");
+
+  } catch (error) {
+    console.error("PDF TO WORD ERROR:", error);
+    setProcessingStatus("error");
+    alert("Conversion failed.");
+  } finally {
+    setIsConverting(false);
+  }
+};
+
 
   return (
     <div className="container mx-auto px-4 py-16">

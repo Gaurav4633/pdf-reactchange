@@ -32,30 +32,42 @@ const ExcelToPdf = () => {
     }
   };
 
+  //file handling
+  
   const handleDragOver = (e) => e.preventDefault();
 
-  const handleConvert = async () => {
-    if (!selectedFile) {
-      alert('Please upload an Excel file first.');
-      return;
-    }
+const handleConvert = async () => {
+  if (!selectedFile) {
+    alert("Please select an Excel file");
+    return;
+  }
 
-    setIsConverting(true);
-    setProcessingStatus('processing');
+  setIsConverting(true);              // ✅ FIX
+  setProcessingStatus("processing");
 
-    try {
-      const result = await api.convert(selectedFile, 'pdf');
-      setResult(result);
-      setProcessingStatus('complete');
-      navigate('/download');
-    } catch (error) {
-      console.error(error);
-      setProcessingStatus('error');
-      alert('Conversion failed. Please try again.');
-    } finally {
-      setIsConverting(false);
-    }
-  };
+  try {
+    const response = await api.excelToPdf(selectedFile);
+
+    const filename = response.data.file;
+
+    setResult({
+      url: `http://13.233.66.13:5000/api/pdf/download/${filename}`,
+      filename: filename,
+    });
+
+    setProcessingStatus("complete");
+    navigate("/download");
+
+  } catch (error) {
+    console.error("EXCEL TO PDF ERROR:", error);
+    setProcessingStatus("error");
+    alert("Conversion failed");
+  } finally {
+    setIsConverting(false);           // ✅ FIX
+  }
+};
+
+
 
   return (
     <div className="container mx-auto px-4 py-16">

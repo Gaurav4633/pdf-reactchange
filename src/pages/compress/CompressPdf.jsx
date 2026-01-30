@@ -1,15 +1,33 @@
-import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+
+import { useState, useRef, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+
 import { useFile } from "../../context/FileContext";
 import { api } from "../../services/api";
 import { Upload, Loader2, ArrowRight } from "lucide-react";
 
+
 const CompressPdf = () => {
-  const { selectedFile, setSelectedFile, setResult } = useFile();
+  const {
+    selectedFile,
+    setSelectedFile,
+    setResult,
+    setProcessingStatus, // ✅ FIX: missing before
+  } = useFile();
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [compressLevel, setCompressLevel] = useState("medium"); // UI only
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+  // Jab bhi /compress page open ho
+  setSelectedFile(null);
+  setResult(null);                // optional but recommended
+  setProcessingStatus(null);      // optional but recommended
+}, [location.pathname]);
+
 
   /* ================= FILE HANDLER ================= */
 
@@ -18,7 +36,7 @@ const CompressPdf = () => {
     if (file) setSelectedFile(file);
   };
 
-  /* ================= COMPRESS (LOGIC SAME) ================= */
+  /* ================= COMPRESS LOGIC (FIXED) ================= */
 
   const handleCompress = async () => {
     if (!selectedFile) {
@@ -27,28 +45,32 @@ const CompressPdf = () => {
     }
 
     setIsProcessing(true);
+    setProcessingStatus("processing");
 
     try {
-      // 🔥 SAME LOGIC (NO CHANGE)
-      const pdfBlob = await api.compressPdf(selectedFile);
+      // 🔥 backend JSON return karta hai
+      const response = await api.compressPdf(selectedFile);
 
-      const url = window.URL.createObjectURL(pdfBlob);
+      const filename = response.data.file;
 
       setResult({
-        url,
-        filename: selectedFile.name.replace(".pdf", "-compressed.pdf"),
+        url: `http://localhost:5003/api/pdf/download/${filename}`,
+        filename: filename,
       });
 
+      setProcessingStatus("complete");
       navigate("/download");
+
     } catch (error) {
-      console.error(error);
+      console.error("COMPRESS PDF ERROR:", error);
+      setProcessingStatus("error");
       alert("Compression failed");
     } finally {
       setIsProcessing(false);
     }
   };
 
-  /* ================= UI ================= */
+  /* ================= UI (UNCHANGED) ================= */
 
   return (
     <div className="container mx-auto px-4 py-16">
@@ -109,7 +131,7 @@ const CompressPdf = () => {
       {selectedFile && (
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
 
-          {/* ===== SIDEBAR (AFTER SELECT) ===== */}
+          {/* ===== SIDEBAR ===== */}
           <aside className="lg:col-span-1 bg-white rounded-2xl shadow-xl p-6 h-fit">
             <h2 className="text-lg font-bold mb-4">
               Compression Size

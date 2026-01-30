@@ -43,36 +43,38 @@ const ImageToPdf = () => {
   // 🔥 IMAGE → PDF HANDLER
   // =========================
   const handleConvert = async () => {
-    if (files.length === 0) {
-      alert('Please add at least 1 image.');
-      return;
-    }
+  if (files.length === 0) {
+    alert("Please add at least 1 image.");
+    return;
+  }
 
-    setIsProcessing(true);
-    setProcessingStatus('processing');
+  setIsProcessing(true);
+  setProcessingStatus("processing");
 
-    try {
-      // ✅ BACKEND CALL
-      const pdfBlob = await api.imageToPdf(files);
+  try {
+    // 🔥 CALL BACKEND (JSON RESPONSE)
+    const response = await api.imageToPdf(files);
 
-      const url = window.URL.createObjectURL(pdfBlob);
+    const filename = response.data.file;
 
-      setResult({
-        url,
-        filename: "images_to_pdf.pdf",
-      });
+    // 🔥 BUILD DOWNLOAD URL
+    setResult({
+      url: `http://13.233.66.13:5000/api/pdf/download/${filename}`,
+      filename: filename,
+    });
 
-      setProcessingStatus('complete');
-      navigate('/download');
+    setProcessingStatus("complete");
+    navigate("/download");
 
-    } catch (error) {
-      console.error(error);
-      setProcessingStatus('error');
-      alert('Conversion failed. Please try again.');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+  } catch (error) {
+    console.error("IMAGE TO PDF ERROR:", error);
+    setProcessingStatus("error");
+    alert("Conversion failed. Please try again.");
+  } finally {
+    setIsProcessing(false);
+  }
+};
+
 
   return (
     <div className="container mx-auto px-4 py-16">

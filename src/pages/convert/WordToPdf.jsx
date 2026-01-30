@@ -2,12 +2,22 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFile } from "../../context/FileContext";
 import FilePreview from "../../components/FilePreview";
-import { ArrowRight, Loader2, FileType, Upload } from "lucide-react";
+import {
+  ArrowRight,
+  Loader2,
+  FileType,
+  Upload
+} from "lucide-react";
 import { api } from "../../services/api";
 
 const WordToPdf = () => {
-  const { selectedFile, setSelectedFile, setProcessingStatus, setResult } =
-    useFile();
+  const {
+    selectedFile,
+    setSelectedFile,
+    setProcessingStatus,
+    setResult
+  } = useFile();
+
   const navigate = useNavigate();
   const [isConverting, setIsConverting] = useState(false);
   const fileInputRef = useRef(null);
@@ -16,24 +26,18 @@ const WordToPdf = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-    }
+    if (file) setSelectedFile(file);
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
-    if (file) {
-      setSelectedFile(file);
-    }
+    if (file) setSelectedFile(file);
   };
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
+  const handleDragOver = (e) => e.preventDefault();
 
-  /* ================= CONVERT FUNCTION ================= */
+  /* ================= WORD → PDF LOGIC ================= */
 
   const handleConvert = async () => {
     if (!selectedFile) {
@@ -45,31 +49,24 @@ const WordToPdf = () => {
     setProcessingStatus("processing");
 
     try {
-      const formData = new FormData();
-      formData.append("file", selectedFile);
+      // 🔥 SAME LOGIC AS PPT → PDF
+      const response = await api.wordToPdf(selectedFile);
 
-      const response = await api.post(
-        "/api/convert/word-to-pdf",
-        formData,
-        { responseType: "blob" }
-      );
+      const filename = response.data.file;
 
-      const blob = new Blob([response.data], {
-        type: "application/pdf",
-      });
-      const url = window.URL.createObjectURL(blob);
-
+      // 🔥 SAME DOWNLOAD FLOW
       setResult({
-        url,
-        name: selectedFile.name.replace(/\.(doc|docx)$/i, ".pdf"),
+        url: `http://13.233.66.13:5000/api/pdf/download/${filename}`,
+        filename: filename,
       });
 
       setProcessingStatus("complete");
       navigate("/download");
+
     } catch (error) {
-      console.error(error);
-      alert("Conversion failed");
+      console.error("WORD TO PDF ERROR:", error);
       setProcessingStatus("error");
+      alert("Conversion failed");
     } finally {
       setIsConverting(false);
     }
@@ -80,6 +77,7 @@ const WordToPdf = () => {
   return (
     <div className="container mx-auto px-4 py-16">
       <div className="max-w-2xl mx-auto text-center">
+
         {/* Heading */}
         <div className="flex items-center justify-center gap-3 mb-4">
           <FileType size={36} className="text-purple-600" />
@@ -90,11 +88,13 @@ const WordToPdf = () => {
 
         <p className="text-gray-600 mb-12 text-lg">
           Convert{" "}
-          <span className="font-semibold text-purple-600">DOC / DOCX</span>{" "}
+          <span className="font-semibold text-purple-600">
+            DOC / DOCX
+          </span>{" "}
           files into high-quality PDFs easily.
         </p>
 
-        {/* ================= NO FILE ================= */}
+        {/* ========== NO FILE SELECTED ========== */}
         {!selectedFile && (
           <div
             className="
@@ -141,7 +141,7 @@ const WordToPdf = () => {
           </div>
         )}
 
-        {/* ================= FILE SELECTED ================= */}
+        {/* ========== FILE SELECTED ========== */}
         {selectedFile && (
           <>
             <div className="mb-12 text-left">
@@ -178,6 +178,7 @@ const WordToPdf = () => {
             </button>
           </>
         )}
+
       </div>
     </div>
   );

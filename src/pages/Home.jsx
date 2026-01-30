@@ -19,6 +19,36 @@ const Home = () => {
   const navigate = useNavigate(); // ✅ ADD THIS
 
   const tools = [
+
+     {
+      title: "PDF to Word",
+      description: "Convert your PDF to WORD documents with incredible accuracy.",
+      icon: FileText,
+      color: "from-blue-600 to-cyan-500",
+      to: "/convert/pdf-to-word"
+    },
+     {
+  title: "PDF to Excel",
+  description: "Extract tables and data from PDF files into editable Excel sheets.",
+  icon: FileSpreadsheet,
+  color: "from-blue-500 to-green-500",
+  to: "/convert/pdf-to-excel"
+},
+    {
+      title: "Word to PDF",
+      description: "Make DOC and DOCX files easy to read by converting them to PDF.",
+      icon: FileType,
+      color: "from-purple-600 to-fuchsia-500",
+      to: "/convert/word-to-pdf"
+    },
+     {
+      title: "PPT to PDF",
+      description: "Convert your PPT pages into PDF Properly",
+      icon: ImageIcon,
+      color: "from-orange-500 to-yellow-500",
+      to: "/convert/Ppt-to-pdf"
+    },
+   
     {
       title: "Merge PDF",
       description: "Combine multiple PDFs into one unified document.",
@@ -40,35 +70,9 @@ const Home = () => {
       color: "from-yellow-500 to-orange-500",
       to: "/compress"
     },
-    {
-      title: "Word to PDF",
-      description: "Make DOC and DOCX files easy to read by converting them to PDF.",
-      icon: FileType,
-      color: "from-purple-600 to-fuchsia-500",
-      to: "/convert/word-to-pdf"
-    },
-    {
-      title: "PDF to Word",
-      description: "Convert your PDF to WORD documents with incredible accuracy.",
-      icon: FileText,
-      color: "from-blue-600 to-cyan-500",
-      to: "/convert/pdf-to-word"
-    },
-   {
-  title: "PDF to Excel",
-  description: "Extract tables and data from PDF files into editable Excel sheets.",
-  icon: FileSpreadsheet,
-  color: "from-blue-500 to-cyan-500",
-  to: "/convert/pdf-to-excel"
-}
-,
-     {
-      title: "PPT to PDF",
-      description: "Convert your PPT pages into PDF Properly",
-      icon: ImageIcon,
-      color: "from-orange-500 to-yellow-500",
-      to: "/convert/Ppt-to-pdf"
-    },
+    
+  
+    
     {
   title: "Excel to PDF",
   description: "Convert Excel spreadsheets into a clean and printable PDF file.",
@@ -85,13 +89,7 @@ const Home = () => {
       color: "from-teal-500 to-cyan-500",
       to: "/rotate"
     },
-    {
-      title: "PDF to JPG",
-      description: "Extract images from your PDF or save each page as a separate image.",
-      icon: FileImage,
-      color: "from-red-500 to-orange-500",
-      to: "/convert/pdf-to-jpg"
-    },
+    
     {
   title: "Edit PDF",
   description: "Edit text, images, or pages in your PDF file easily and securely.",
@@ -99,6 +97,13 @@ const Home = () => {
   color: "from-yellow-500 to-orange-500",
   to: "/edit"
 },
+   {
+      title: "PDF to Image",
+      description: "Extract images from your PDF or save each page as a separate image.",
+      icon: FileImage,
+      color: "from-red-500 to-orange-500",
+      to: "/convert/pdf-to-jpg"
+    },
 
     {
   title: "Image to PDF",
@@ -125,7 +130,7 @@ const Home = () => {
               Most Popular PDF Tools
             </h2>
             <p className="text-gray-600 text-lg">
-              20+ powerful tools to convert, compress, and edit PDFs — 100% FREE.
+               powerful tools to convert, compress, and edit PDFs — 100% FREE.
             </p>
           </div>
 

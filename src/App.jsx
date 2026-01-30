@@ -5,13 +5,14 @@ import Home from './pages/Home';
 import Options from './pages/Options';
 import Download from './pages/Download';
 import Convert from "./pages/convert/Convert";
+import ProjectDetails from './pages/ProjectDetails';
 
 // Auth
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 
 // Tools
-import PdfToJpg from './pages/convert/PdfToJpg';
+import PdfToImage from './pages/convert/PdfToImage';
 import PdfToWord from './pages/convert/PdfToWord';
 import WordToPdf from './pages/convert/WordToPdf';
 import PdfToExcel from './pages/convert/PdfToExcel';
@@ -25,6 +26,7 @@ import ExcelToPdf from './pages/convert/ExcelToPdf';
 import EditPdf from './pages/edit/EditPdf';
 import ImageToPdf from './pages/convert/ImageToPdf';
 import ConvertTools from './components/ConvertTools';
+
 function App() {
   const location = useLocation();
 
@@ -42,13 +44,14 @@ function App() {
           {/* Auth */}
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/signup" element={<Signup />} />
-          
+          <Route path="/project-details" element={<ProjectDetails />} />
+
           {/* Tools */}
           <Route path="/convert/pdf-to-word" element={<PdfToWord />} />
           <Route path="/convert/word-to-pdf" element={<WordToPdf />} />
           <Route path="/convert/pdf-to-excel" element={<PdfToExcel />} />
           <Route path="/convert/pdf-to-ppt" element={<PdfToPpt />} />
-          <Route path="/convert/pdf-to-jpg" element={<PdfToJpg />} />
+          <Route path="/convert/pdf-to-image" element={<PdfToImage />} />
           <Route path="/compress" element={<CompressPdf />} />
           <Route path="/merge" element={<MergePdf />} />
           <Route path="/edit" element={<EditPdf />} />

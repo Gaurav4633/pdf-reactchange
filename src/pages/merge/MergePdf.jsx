@@ -37,38 +37,35 @@ const MergePdf = () => {
   // 🔥 FINAL MERGE HANDLER
   // =========================
   const handleMerge = async () => {
-    if (files.length < 2) {
-      alert('Please add at least 2 PDF files to merge.');
-      return;
-    }
+  if (files.length < 2) {
+    alert("Please select at least 2 PDF files");
+    return;
+  }
 
-    setIsProcessing(true);
-    setProcessingStatus('processing');
+  setIsProcessing(true);
+  setProcessingStatus("processing");
 
-    try {
-      // ✅ BACKEND CALL
-      const pdfBlob = await api.mergePdf(files);
+  try {
+    const response = await api.mergePdf(files);
 
-      // blob → downloadable URL
-      const url = window.URL.createObjectURL(pdfBlob);
+    const filename = response.data.file;
 
-      // context me result save
-      setResult({
-        url,
-        filename: "merged_document.pdf",
-      });
+    setResult({
+      url: `http://13.233.66.13:5000/api/pdf/download/${filename}`,
+      filename: filename,
+    });
 
-      setProcessingStatus('complete');
-      navigate('/download');
+    setProcessingStatus("complete");
+    navigate("/download");
 
-    } catch (error) {
-      console.error(error);
-      setProcessingStatus('error');
-      alert('Merge failed. Please try again.');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+  } catch (error) {
+    console.error("MERGE PDF ERROR:", error);
+    setProcessingStatus("error");
+    alert("Merge failed");
+  } finally {
+    setIsProcessing(false);
+  }
+};
 
   return (
     <div className="container mx-auto px-4 py-16">

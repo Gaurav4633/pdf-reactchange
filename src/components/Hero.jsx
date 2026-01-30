@@ -37,13 +37,13 @@ const Hero = () => {
       <div className="container mx-auto max-w-5xl  text-center">
 
         {/* Heading */}
-        <h1 className="text-3xl md:text-5xl font-extrabold mb-6 leading-tight">
+        <h1 className="text-2xl md:text-4xl font-extrabold mb-6 leading-tight">
           The complete solution for 
           <span className="text-brand-400"> working with PDFs made simple</span>
        
         </h1>
 
-        <p className="text-base md:text-lg text-gray-300 mb-14 max-w-3xl mx-auto">
+        <p className="text-sm md:text-sm text-gray-300 mb-14 max-w-3xl mx-auto">
           100% FREE, fast, and easy tools to merge, split, compress, convert,
           rotate, unlock, and watermark PDFs — in just a few clicks.
         </p>
@@ -51,12 +51,16 @@ const Hero = () => {
         {/* Upload Card */}
         <div
           className="
-            bg-white rounded-3xl p-10 md:p-14
-            shadow-2xl max-w-xl mx-auto
-            border-4 border-dashed border-brand-500
-            hover:border-brand-600
-            transition-all duration-300
-            cursor-pointer
+            bg-white rounded-3xl
+             p-10 md:p-14
+             shadow-2xl
+            w-full max-w-[700px]   /* 👈 width set */
+            h-[340px]          /* 👈 height set */
+            mx-auto
+             border-4 border-dashed border-brand-500
+             hover:border-brand-600
+             transition-all duration-300
+             cursor-pointer
             hover:scale-[1.02]
           "
           onDrop={handleDrop}
@@ -90,7 +94,7 @@ const Hero = () => {
               "
             >
               <FileUp size={22} />
-              Select PDF File
+              Select  File
             </button>
 
             <p className="text-gray-400 text-sm">
