@@ -54,7 +54,7 @@ const CompressPdf = () => {
       const filename = response.data.file;
 
       setResult({
-        url: `http://localhost:5003/api/pdf/download/${filename}`,
+        url: `http://localhost:5000/api/pdf/download/${filename}`,
         filename: filename,
       });
 
