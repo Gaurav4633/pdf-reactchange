@@ -3,7 +3,7 @@ import PdfToExcel from "../pages/convert/PdfToExcel";
 
 // 🔹 single axios instance
 const instance = axios.create({
-  baseURL: "http://13.233.66.13:5000",
+  baseURL: "https://pdf-backend-proxy.gourav4633.workers.dev",
   timeout: 60000,
 });
 
