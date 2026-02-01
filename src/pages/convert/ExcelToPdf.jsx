@@ -51,8 +51,8 @@ const handleConvert = async () => {
     const filename = response.data.file;
 
     setResult({
-      url: `http://13.233.66.13:5000/api/pdf/download/${filename}`,
-      filename: filename,
+      url: `http://api.pdftools360.in/api/pdf/download/${filename}`, // ✅ FIXED
+    filename: filename,
     });
 
     setProcessingStatus("complete");

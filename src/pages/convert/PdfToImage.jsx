@@ -47,7 +47,7 @@ const PdfToImage = () => {
       const firstImage = images[0];
 
       setResult({
-        url: `http://13.233.66.13:5000/api/pdf/download/${firstImage}`,
+ url: `http://api.pdftools360.in/api/pdf/download/${filename}`, // ✅ FIXED
         filename: firstImage,
       });
 
