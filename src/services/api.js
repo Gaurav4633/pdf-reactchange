@@ -3,7 +3,7 @@ import PdfToExcel from "../pages/convert/PdfToExcel";
 
 // 🔹 single axios instance
 const instance = axios.create({
- baseURL: "http://api.pdftools360.in:5000",
+ baseURL: "http://api.pdftools360.in",
   timeout: 60000,
 });
 
