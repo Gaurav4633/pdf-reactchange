@@ -47,7 +47,7 @@ const SplitPdf = () => {
       const firstFile = filenames[0];
 
       setResult({
-        url: `http://api.pdftools360.in/api/pdf/download/${filename}`, // ✅ FIXED
+        url: `https://api.pdftools360.in/api/pdf/download/${filename}`, // ✅ FIXED
         filename: firstFile,
       });
 

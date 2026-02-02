@@ -56,7 +56,7 @@ const WordToPdf = () => {
 
       // 🔥 SAME DOWNLOAD FLOW
       setResult({
-        url: `http://api.pdftools360.in/api/pdf/download/${filename}`,
+        url: `https://api.pdftools360.in/api/pdf/download/${filename}`,
 
         filename: filename,
       });

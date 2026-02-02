@@ -48,12 +48,16 @@ const handleConvert = async () => {
   setProcessingStatus("processing");
 
   try {
-    const response = await api.pdfToWord(selectedFile); // 👈 new api
+    const response = await api.pdfToWord(selectedFile);
 
-    const filename = response.file;
+    const filename = response.file || response.filename;
+
+    if (!filename) {
+      throw new Error("Filename not received from server");
+    }
 
     setResult({
-      url: `http://api.pdftools360.in/api/pdf/download/${filename}`, // ✅ FIXED
+      url: `https://api.pdftools360.in/api/pdf/download/${filename}`,
       filename: filename,
     });
 
@@ -68,6 +72,7 @@ const handleConvert = async () => {
     setIsConverting(false);
   }
 };
+
 
 
   return (

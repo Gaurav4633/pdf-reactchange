@@ -59,7 +59,7 @@ const ImageToPdf = () => {
 
     // 🔥 BUILD DOWNLOAD URL
     setResult({
-     url: `http://api.pdftools360.in/api/pdf/download/${filename}`, // ✅ FIXED
+     url: `https://api.pdftools360.in/api/pdf/download/${filename}`, // ✅ FIXED
     filename: filename,
     });
 
